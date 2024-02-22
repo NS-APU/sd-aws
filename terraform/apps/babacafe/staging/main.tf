@@ -16,12 +16,12 @@ terraform {
 }
 
 provider "aws" {
-  region = var.aws_region
+  region = "ap-northeast-1"
 }
 
 module "vpc" {
   source = "../modules/vpc"
-  private_subnet_cidr = "10.0.3.0/24"
+  subnet_cidr = "10.0.3.0/24"
 }
 
 module "s3" {
@@ -33,5 +33,5 @@ module "rds" {
   source = "../modules/rds"
   rds_allocated_storage = 10
   rds_tag_name = "babacafe-staging"
-  rds_subnet_ids = [module.vpc.private_subnet_id]
+  rds_subnet_ids = [module.vpc.subnet_id]
 }
