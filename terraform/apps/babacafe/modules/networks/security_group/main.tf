@@ -7,7 +7,7 @@ resource "aws_security_group" "sg_allow_https" {
   vpc_id = var.vpc_id
 }
 
-resource "aws_vpc_security_group_ingress_rule" "allow_https_port" {
+resource "aws_vpc_security_group_ingress_rule" "sg_allow_https" {
   security_group_id = aws_security_group.sg_allow_https.id
   cidr_ipv4 = "0.0.0.0/0"
   from_port = 443
@@ -15,7 +15,7 @@ resource "aws_vpc_security_group_ingress_rule" "allow_https_port" {
   ip_protocol = "tcp"
 }
 
-resource "aws_vpc_security_group_egress_rule" "allow_all_traffic" {
+resource "aws_vpc_security_group_egress_rule" "sg_allow_https" {
   security_group_id = aws_security_group.sg_allow_https.id
   cidr_ipv4 = "0.0.0.0/0"
   ip_protocol = -1
@@ -30,7 +30,7 @@ resource "aws_security_group" "sg_allow_psql" {
   vpc_id = var.vpc_id
 }
 
-resource "aws_vpc_security_group_ingress_rule" "allow_psql_port" {
+resource "aws_vpc_security_group_ingress_rule" "sg_allow_psql" {
   security_group_id = aws_security_group.sg_allow_psql.id
   cidr_ipv4 = var.vpc_cidr_block
   from_port         = 5432
@@ -38,7 +38,7 @@ resource "aws_vpc_security_group_ingress_rule" "allow_psql_port" {
   ip_protocol = "tcp"
 }
 
-resource "aws_vpc_security_group_egress_rule" "allow_all_traffic" {
+resource "aws_vpc_security_group_egress_rule" "sg_allow_psql" {
   security_group_id = aws_security_group.sg_allow_psql.id
   cidr_ipv4 = var.vpc_cidr_block
   ip_protocol = -1
