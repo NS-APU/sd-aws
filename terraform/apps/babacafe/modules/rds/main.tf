@@ -1,4 +1,4 @@
-resource "aws_db_instance" "rds" {
+resource "aws_db_instance" "babacafe" {
   allocated_storage = var.rds_allocated_storage
   storage_type      = "gp2"
   engine            = "postgres"
