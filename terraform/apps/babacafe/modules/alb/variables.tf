@@ -3,10 +3,10 @@ variable "alb_name" {
   default = "babacafe-alb"
 }
 
-variable "alb_security_groups" {
+variable "alb_subnet_ids" {
   type = list(string)
 }
 
-variable "alb_subnet_ids" {
-  type = list(string)
+variable "vpc_id" {
+  type = string
 }
