@@ -1,6 +1,5 @@
-variable "alb_name" {
+variable "name_prefix" {
   type = string
-  default = "babacafe-alb"
 }
 
 variable "alb_subnet_ids" {
@@ -8,5 +7,9 @@ variable "alb_subnet_ids" {
 }
 
 variable "vpc_id" {
+  type = string
+}
+
+variable "certificate_arn" {
   type = string
 }

@@ -1,4 +1,3 @@
-variable "ecr_repository_name" {
+variable "name_prefix" {
   type = string
-  default = "babacafe"
 }

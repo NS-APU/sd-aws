@@ -15,18 +15,46 @@ terraform {
   }
 }
 
-#
-# Staging VPC Subnets
-#
-data "staging" "staging" {
+provider "aws" {
+  region = "ap-northeast-1"
+  default_tags {
+    tags = {
+      project = "BabaCafe"
+      env = "common"
+    }
+  }
 }
 
 #
-# Production VPC Subnets
+# Networks
 #
 module "vpc" {
-  source = "../modules/vpc"
-  subnet_cidr = "10.0.1.0/24"
+  source = "../modules/networks/vpc"
+  vpc_cidr_block = local.vpc_cidr_block
+}
+
+module "igw" {
+  source = "../modules/networks/internet_gateway"
+  vpc_id = module.vpc.vpc_id
+}
+
+module "alb_subnet" {
+  source = "../modules/networks/public_subnet"
+  cidr_block_1a = local.alb_subnet_cidr_block_1a
+  cidr_block_1c = local.alb_subnet_cidr_block_1c
+  vpc_id = module.vpc.vpc_id
+  igw_id = module.igw.igw_id
+  availability_zone_1a = local.availability_zone_1a
+  availability_zone_1c = local.availability_zone_1c
+}
+
+#
+# ACM
+#
+module "acm" {
+  source = "../modules/acm"
+  zone_name = module.route53.zone_name-prod
+  zone_id = module.route53.zone_id-prod
 }
 
 #
@@ -34,7 +62,28 @@ module "vpc" {
 #
 module "alb" {
   source = "../modules/alb"
-  alb_name = "babacafe"
-  alb_security_groups = [ module.vpc.sg_ingress_allow_https_port_id ]
-  alb_subnet_ids = [ module.vpc.subnet_id ]
+  name_prefix = local.name_prefix
+  alb_subnet_ids = module.alb_subnet.subnet_ids
+  vpc_id = module.vpc.vpc_id
+  certificate_arn = module.acm.certificate_arn
+
+  depends_on = [ module.acm ]
+}
+
+#
+# ECR
+#
+module "ecr" {
+  source = "../modules/ecr"
+  name_prefix = local.name_prefix
+}
+
+#
+# Route53
+#
+module "route53" {
+  source = "../modules/route53"
+  domain_name = local.domain_name
+  alb_dns_name = module.alb.dns_name
+  alb_zone_id = module.alb.zone_id
 }
