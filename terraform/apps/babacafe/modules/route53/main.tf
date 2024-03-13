@@ -15,7 +15,7 @@ resource "aws_route53_record" "babacafe-prod" {
 }
 
 resource "aws_route53_zone" "babacafe-staging" {
-  name = "babacare-stag.${var.domain_name}"
+  name = "stag.babacafe.${var.domain_name}"
 }
 
 resource "aws_route53_record" "babacafe-staging" {
