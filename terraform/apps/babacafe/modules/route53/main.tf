@@ -4,6 +4,10 @@ data "aws_route53_zone" "host" {
 
 resource "aws_route53_zone" "babacafe-prod" {
   name = "babacafe.${var.domain_name}"
+
+  tags = {
+    env = "product"
+  }
 }
 
 resource "aws_route53_record" "babacafe-prod" {
@@ -33,6 +37,10 @@ resource "aws_route53_record" "babacafe-prod-ns" {
 
 resource "aws_route53_zone" "babacafe-stag" {
   name = "stag.babacafe.${var.domain_name}"
+
+  tags = {
+    env = "staging"
+  }
 }
 
 resource "aws_route53_record" "babacafe-stag" {

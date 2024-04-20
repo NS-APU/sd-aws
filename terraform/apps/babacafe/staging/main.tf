@@ -17,21 +17,50 @@ terraform {
 
 provider "aws" {
   region = "ap-northeast-1"
+  default_tags {
+    tags = {
+      project = "BabaCafe"
+      env = "staging"
+    }
+  }
 }
 
-module "vpc" {
-  source = "../modules/vpc"
-  subnet_cidr = "10.0.3.0/24"
+#
+# Network
+#
+data "aws_vpc" "babacafe" {
+  cidr_block = local.vpc_cidr_block
+}
+
+module "subnet" {
+  source = "../modules/networks/private_subnet"
+  vpc_id = data.aws_vpc.babacafe.id
+  cidr_block = local.subnet_cidr_block
+}
+
+data "aws_route53_zone" "babacafe-stag" {
+  name = "stag.babacafe.${local.domain_name}"
 }
 
 module "s3" {
   source = "../modules/s3"
-  s3_bucket_name = "babacafe-staging"
+  s3_bucket_name = data.aws_route53_zone.babacafe-stag.name
 }
 
 module "rds" {
   source = "../modules/rds"
-  rds_allocated_storage = 10
-  rds_tag_name = "babacafe-staging"
-  rds_subnet_ids = [module.vpc.subnet_id]
+  allocated_storage = 10
+  tag_name = "babacafe-staging"
+  subnet_ids = [module.subnet.subnet_id]
+  vpc_id = data.aws_vpc.babacafe.id
+  vpc_cidr_block = local.vpc_cidr_block
+}
+
+module "ecs" {
+  source = "../modules/ecs"
+  name_prefix = "babacafe-staging"
+  task_definition_path = "${path.module}/task_definition.json"
+  subnet_ids = [module.subnet.subnet_id]
+  vpc_id = data.aws_vpc.babacafe.id
+  vpc_cidr_block = local.vpc_cidr_block
 }

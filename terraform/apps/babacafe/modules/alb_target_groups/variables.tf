@@ -13,3 +13,7 @@ variable "vpc_id" {
 variable "zone_name" {
   type = string
 }
+
+variable "lb_listener_arn" {
+  type = string
+}

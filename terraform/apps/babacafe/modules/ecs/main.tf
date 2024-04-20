@@ -41,7 +41,7 @@ resource "aws_vpc_security_group_ingress_rule" "sg_allow_http" {
 }
 
 resource "aws_vpc_security_group_egress_rule" "sg_allow_http" {
-  security_group_id = aws_security_group.sg_allow_https.id
+  security_group_id = aws_security_group.sg_allow_http.id
   cidr_ipv4 = var.vpc_cidr_block
   ip_protocol = -1
 }

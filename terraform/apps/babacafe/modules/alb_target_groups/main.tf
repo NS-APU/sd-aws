@@ -10,12 +10,14 @@ resource "aws_lb_target_group" "babacafe" {
 }
 
 resource "aws_lb_listener_rule" "babacafe" {
-  listener_arn = aws_lb_listener.babacafe-https.arn
+  listener_arn = var.lb_listener_arn
   priority = 1
+
   action {
     type = "forward"
     target_group_arn = aws_lb_target_group.babacafe.arn
   }
+
   condition {
     host_header {
       values = [var.zone_name]

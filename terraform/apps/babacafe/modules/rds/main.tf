@@ -5,9 +5,6 @@ resource "aws_db_instance" "babacafe" {
   engine_version    = "15.2"
   instance_class    = "db.t3.small"
   vpc_security_group_ids = [aws_security_group.sg_allow_psql.id]
-  tags = {
-    name = var.tag_name
-  }
 }
 
 resource "aws_db_subnet_group" "babacafe" {

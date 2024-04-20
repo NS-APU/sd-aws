@@ -20,7 +20,7 @@ resource "aws_s3_bucket_website_configuration" "frontend" {
 
 }
 
-resource "aws_s3_bucket_server_side_encryption_configuration" "babacafe" {
+resource "aws_s3_bucket_server_side_encryption_configuration" "frontend" {
   bucket = aws_s3_bucket.frontend.id
   rule {
     apply_server_side_encryption_by_default {
