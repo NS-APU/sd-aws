@@ -8,8 +8,22 @@ resource "aws_ecs_task_definition" "babacafe" {
   network_mode = "awsvpc"
   cpu = var.cpu
   memory = var.memory
+  execution_role_arn = var.task_execution_role_arn
+  task_role_arn = var.task_role_arn 
 
-  container_definitions = file(var.task_definition_path)
+  container_definitions = jsonencode([
+    {
+      name = var.name
+      image = var.image
+      essential = true
+      portMappings = [{
+        protocol = "tcp"
+        containerPort = 80
+        hostPort = 80
+      }]
+      // TODO: Add logConfigration
+    },
+  ])
 }
 
 resource "aws_ecs_service" "babacafe" {
@@ -41,7 +55,7 @@ resource "aws_vpc_security_group_ingress_rule" "sg_allow_http" {
 }
 
 resource "aws_vpc_security_group_egress_rule" "sg_allow_http" {
-  security_group_id = aws_security_group.sg_allow_https.id
+  security_group_id = aws_security_group.sg_allow_http.id
   cidr_ipv4 = var.vpc_cidr_block
   ip_protocol = -1
 }

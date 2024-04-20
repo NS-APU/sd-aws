@@ -64,7 +64,7 @@ module "alb" {
   source = "../modules/alb"
   name_prefix = local.name_prefix
   alb_subnet_ids = module.alb_subnet.subnet_ids
-  vpc_id = module.vpc.vpc_id
+  vpc_id = module.networks.vpc.vpc_id
   certificate_arn = module.acm.certificate_arn
 
   depends_on = [ module.acm ]

@@ -2,12 +2,12 @@ variable "name_prefix" {
   type = string
 }
 
-variable "task_definition_path" {
+variable "task_execution_role_arn" {
   type = string
 }
 
-variable "subnet_ids" {
-  type = list(string)
+variable "task_role_arn" {
+  type = string
 }
 
 variable "cpu" {
@@ -18,6 +18,18 @@ variable "cpu" {
 variable "memory" {
   type = string
   default = "1024"
+}
+
+variable "name" {
+  type = string
+}
+
+variable "image" {
+  type = string
+}
+
+variable "subnet_ids" {
+  type = list(string)
 }
 
 variable "vpc_id" {
