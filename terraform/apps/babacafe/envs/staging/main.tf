@@ -55,6 +55,11 @@ data "aws_ecr_repository" "babacafe" {
   name = "babacafe-ecr-repo"
 }
 
+module "cloudwatch" {
+  source = "../../modules/cloudwatch"
+  log_group_name = "babacafe-staging"
+}
+
 module "ecs" {
   source = "../../modules/ecs"
   name_prefix = "babacafe-staging"
@@ -64,6 +69,7 @@ module "ecs" {
   memory = "512"
   name = "babacafe-staging"
   image = "${data.aws_ecr_repository.babacafe.repository_url}:latest"
+  log_group_name = module.cloudwatch.log_group_name
   subnet_ids = module.private_subnet.subnet_ids
   vpc_id = data.aws_vpc.babacafe.id
   vpc_cidr_block = data.aws_vpc.babacafe.cidr_block

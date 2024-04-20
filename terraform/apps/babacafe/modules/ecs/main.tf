@@ -21,7 +21,14 @@ resource "aws_ecs_task_definition" "babacafe" {
         containerPort = 80
         hostPort = 80
       }]
-      // TODO: Add logConfigration
+      logConfiguration = {
+        logDriver = "awslogs"
+        options   = {
+          awslogs-region : "ap-northeast-1"
+          awslogs-group : var.log_group_name
+          awslogs-stream-prefix : "ecs"
+        }
+      }
     },
   ])
 }

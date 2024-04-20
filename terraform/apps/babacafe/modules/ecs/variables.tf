@@ -28,6 +28,10 @@ variable "image" {
   type = string
 }
 
+variable "log_group_name" {
+  type = string
+}
+
 variable "subnet_ids" {
   type = list(string)
 }
