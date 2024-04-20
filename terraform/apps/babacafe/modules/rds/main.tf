@@ -4,7 +4,11 @@ resource "aws_db_instance" "babacafe" {
   engine            = "postgres"
   engine_version    = "15.2"
   instance_class    = "db.t3.small"
+  db_subnet_group_name = aws_db_subnet_group.babacafe.name
   vpc_security_group_ids = [aws_security_group.sg_allow_psql.id]
+  multi_az = false
+  username = "test"
+  password = "babatest"
   tags = {
     name = var.tag_name
   }
