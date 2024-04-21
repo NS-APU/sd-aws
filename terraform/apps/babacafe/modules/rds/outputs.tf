@@ -1,3 +1,3 @@
-output "endpoint" {
-  value = aws_db_instance.babacafe.endpoint
+output "address" {
+  value = aws_db_instance.babacafe.address
 }
