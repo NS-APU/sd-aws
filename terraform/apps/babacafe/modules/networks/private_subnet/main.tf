@@ -2,12 +2,20 @@ resource "aws_subnet" "app-1a" {
   vpc_id = var.vpc_id
   cidr_block = var.cidr_block_1a
   availability_zone = var.availability_zone_1a
+
+  tags = {
+    Name = "app-1a"
+  }
 }
 
 resource "aws_subnet" "app-1c" {
   vpc_id = var.vpc_id
   cidr_block = var.cidr_block_1c
   availability_zone = var.availability_zone_1c
+
+  tags = {
+    Name = "app-1c"
+  }
 }
 
 resource "aws_route_table" "app-1a" {
