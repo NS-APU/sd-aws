@@ -35,7 +35,6 @@ module "vpc" {
 
 module "vpc_endpoint" {
   source = "../modules/networks/vpc_endpoint"
-
 }
 
 module "igw" {
