@@ -49,7 +49,7 @@ data "aws_lb_listener" "selected443" {
 module "alb_target_group" {
   source = "../../modules/alb_target_groups"
   zone_name = "stag.babacafe.systemdesign-apu.com"
-  path_pattern = "/api/*"
+  path_pattern = "/*"
   vpc_id = data.aws_vpc.babacafe.id
   port = 3000
   alb_tg_name = "babacafe-staging"
