@@ -18,3 +18,8 @@ variable "vpc_id" {
 variable "vpc_cidr_block" {
   type = string
 }
+
+variable "db_name" {
+  type = string
+  default = "babacafe"
+}

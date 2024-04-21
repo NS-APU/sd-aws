@@ -13,3 +13,11 @@ variable "vpc_id" {
 variable "zone_name" {
   type = string
 }
+
+variable "path_pattern" {
+  type = string
+}
+
+variable "listener_arn" {
+  type = string
+}

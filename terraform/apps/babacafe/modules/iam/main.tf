@@ -12,7 +12,8 @@ resource "aws_iam_role" "ecs_task_execution_role" {
   })
   managed_policy_arns = [
     "arn:aws:iam::aws:policy/service-role/AmazonECSTaskExecutionRolePolicy",
-    "arn:aws:iam::aws:policy/AmazonSSMReadOnlyAccess"
+    "arn:aws:iam::aws:policy/AmazonSSMReadOnlyAccess",
+    "arn:aws:iam::aws:policy/AmazonRDSFullAccess",
   ]
 }
 
@@ -30,6 +31,7 @@ resource "aws_iam_role_policy" "kms_decrypt_policy" {
           "ecr:BatchCheckLayerAvailability",
           "ecr:GetDownloadUrlForLayer",
           "ecr:BatchGetImage",
+          "rds-db:connect",
         ],
         "Resource": "*"
       }

@@ -43,3 +43,11 @@ variable "vpc_id" {
 variable "vpc_cidr_block" {
   type = string
 }
+
+variable "target_group_arn" {
+  type = string
+}
+
+variable "env" {
+  type = list(map(string))
+}

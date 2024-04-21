@@ -33,6 +33,11 @@ module "vpc" {
   vpc_cidr_block = local.vpc_cidr_block
 }
 
+module "vpc_endpoint" {
+  source = "../modules/networks/vpc_endpoint"
+
+}
+
 module "igw" {
   source = "../modules/networks/internet_gateway"
   vpc_id = module.vpc.vpc_id

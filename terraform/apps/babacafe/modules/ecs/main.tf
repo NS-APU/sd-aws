@@ -28,8 +28,9 @@ resource "aws_ecs_task_definition" "babacafe" {
           awslogs-group : var.log_group_name
           awslogs-stream-prefix : "ecs"
         }
-      }
-    },
+      },
+      environment = var.env 
+    }
   ])
 }
 
@@ -37,10 +38,18 @@ resource "aws_ecs_service" "babacafe" {
   name = "${var.name_prefix}-service"
   cluster = aws_ecs_cluster.babacafe.id
   task_definition = aws_ecs_task_definition.babacafe.arn
+  launch_type = "FARGATE"
+  desired_count = 1
 
   network_configuration {
     security_groups = [aws_security_group.sg_allow_http.id]
     subnets = var.subnet_ids
+  }
+
+  load_balancer {
+    target_group_arn = var.target_group_arn
+    container_name   = var.name
+    container_port   = 80
   }
 }
 
