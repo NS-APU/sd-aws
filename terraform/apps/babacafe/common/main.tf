@@ -33,8 +33,18 @@ module "vpc" {
   vpc_cidr_block = local.vpc_cidr_block
 }
 
+data "aws_subnets" "private_subnets" {
+  filter {
+    name = "tag:Name"
+    values = ["app-1a", "app-1c"]
+  }
+}
+
 module "vpc_endpoint" {
   source = "../modules/networks/vpc_endpoint"
+  aws_region = "ap-northeast-1"
+  vpc_id = module.vpc.vpc_id
+  subnet_ids = data.aws_subnets.private_subnets.ids
 }
 
 module "igw" {
@@ -68,7 +78,7 @@ module "alb" {
   source = "../modules/alb"
   name_prefix = local.name_prefix
   alb_subnet_ids = module.alb_subnet.subnet_ids
-  vpc_id = module.networks.vpc.vpc_id
+  vpc_id = module.vpc.vpc_id
   certificate_arn = module.acm.certificate_arn
 
   depends_on = [ module.acm ]
