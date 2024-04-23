@@ -18,8 +18,8 @@ resource "aws_ecs_task_definition" "babacafe" {
       essential = true
       portMappings = [{
         protocol = "tcp"
-        containerPort = 80
-        hostPort = 80
+        containerPort = 3000
+        hostPort = 3000
       }]
       logConfiguration = {
         logDriver = "awslogs"
@@ -42,36 +42,36 @@ resource "aws_ecs_service" "babacafe" {
   desired_count = 1
 
   network_configuration {
-    security_groups = [aws_security_group.sg_allow_http.id]
+    security_groups = [aws_security_group.sg_ecs.id]
     subnets = var.subnet_ids
   }
 
   load_balancer {
     target_group_arn = var.target_group_arn
     container_name   = var.name
-    container_port   = 80
+    container_port   = 3000
   }
 }
 
 #
 # http security group
 #
-resource "aws_security_group" "sg_allow_http" {
-  name = "sg_allow_http"
-  description = "allow http port"
+resource "aws_security_group" "sg_ecs" {
+  name = "sg_ecs"
+  description = "security group for ecs instance"
   vpc_id = var.vpc_id
 }
 
-resource "aws_vpc_security_group_ingress_rule" "sg_allow_http" {
-  security_group_id = aws_security_group.sg_allow_http.id
+resource "aws_vpc_security_group_ingress_rule" "sg_ecs" {
+  security_group_id = aws_security_group.sg_ecs.id
   cidr_ipv4 = var.vpc_cidr_block
-  from_port = 80
-  to_port = 80
+  from_port = 3000
+  to_port = 3000
   ip_protocol = "tcp"
 }
 
-resource "aws_vpc_security_group_egress_rule" "sg_allow_http" {
-  security_group_id = aws_security_group.sg_allow_http.id
-  cidr_ipv4 = var.vpc_cidr_block
+resource "aws_vpc_security_group_egress_rule" "sg_ecs" {
+  security_group_id = aws_security_group.sg_ecs.id
+  cidr_ipv4 = "0.0.0.0/0"
   ip_protocol = -1
 }

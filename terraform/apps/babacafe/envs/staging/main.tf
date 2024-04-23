@@ -48,10 +48,10 @@ data "aws_lb_listener" "selected443" {
 
 module "alb_target_group" {
   source = "../../modules/alb_target_groups"
-  zone_name = "stag.babacafe.sytemdesign-apu.com"
-  path_pattern = "/api/*"
+  zone_name = "stag.babacafe.systemdesign-apu.com"
+  path_pattern = "/*"
   vpc_id = data.aws_vpc.babacafe.id
-  port = 80
+  port = 3000
   alb_tg_name = "babacafe-staging"
   listener_arn = data.aws_lb_listener.selected443.arn 
 }
@@ -94,8 +94,8 @@ module "ecs" {
   vpc_cidr_block = data.aws_vpc.babacafe.cidr_block
   target_group_arn = module.alb_target_group.arn
   env = [
-    {"name": "DBHOST", "value": module.rds.endpoint},
-    {"name": "POSTGRTES_USER", "value": "babacafe"},
+    {"name": "DBHOST", "value": module.rds.address},
+    {"name": "POSTGRES_USER", "value": "babacafe"},
     {"name": "POSTGRES_PASSWORD", "value": "babacafe"},
     {"name": "POSTGRES_DB", "value": "babacafe"},
     {"name": "TZ", "value": "Asia/Tokyo"},
