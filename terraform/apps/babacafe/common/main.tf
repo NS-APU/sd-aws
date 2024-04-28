@@ -67,8 +67,10 @@ module "alb_subnet" {
 #
 module "acm" {
   source = "../modules/acm"
-  zone_name = module.route53.zone_name-prod
-  zone_id = module.route53.zone_id-prod
+  zone_name-prod = module.route53.zone_name-prod
+  zone_name-stag = module.route53.zone_name-stag
+  zone_id-prod = module.route53.zone_id-prod
+  zone_id-stag = module.route53.zone_id-stag
 }
 
 #
@@ -79,9 +81,8 @@ module "alb" {
   name_prefix = local.name_prefix
   alb_subnet_ids = module.alb_subnet.subnet_ids
   vpc_id = module.vpc.vpc_id
-  certificate_arn = module.acm.certificate_arn
-
-  depends_on = [ module.acm ]
+  certificate_arn_prod = module.acm.certificate_arn-prod
+  certificate_arn_stag = module.acm.certificate_arn-stag
 }
 
 #

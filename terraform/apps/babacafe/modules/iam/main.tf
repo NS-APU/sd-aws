@@ -32,9 +32,14 @@ resource "aws_iam_role_policy" "kms_decrypt_policy" {
           "ecr:GetDownloadUrlForLayer",
           "ecr:BatchGetImage",
           "rds-db:connect",
+          "s3:GetObject",
+          "s3:ListBucket",
+          "s3:ListBucketVersions", 
+          "s3:GetBucketACL", 
+          "s3:*Object", 
         ],
         "Resource": "*"
-      }
+      },
     ]
   })
 }
