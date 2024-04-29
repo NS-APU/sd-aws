@@ -17,8 +17,8 @@ resource "aws_iam_role" "ecs_task_execution_role" {
   ]
 }
 
-resource "aws_iam_role_policy" "kms_decrypt_policy" {
-  name = "${var.app-name}_ecs_task_execution_role_policy_kms"
+resource "aws_iam_role_policy" "ecs_task_execution_role_policy" {
+  name = "${var.app-name}_ecs_task_execution_role_policy"
   role               = aws_iam_role.ecs_task_execution_role.id
   policy = jsonencode({
     Version   = "2012-10-17"
@@ -36,7 +36,6 @@ resource "aws_iam_role_policy" "kms_decrypt_policy" {
           "s3:ListBucket",
           "s3:ListBucketVersions", 
           "s3:GetBucketACL", 
-          "s3:*Object", 
         ],
         "Resource": "*"
       },

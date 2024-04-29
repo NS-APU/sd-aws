@@ -82,12 +82,14 @@ module "cloudwatch" {
 module "ecs" {
   source      = "../../modules/ecs"
   name_prefix = "babacafe-staging"
-  cpu                     = "256"
-  memory                  = "512"
+
+  container_cpu                     = "256"
+  container_memory                  = "512"
+  container_name                    = "babacafe-staging"
+  container_image                   = "${data.aws_ecr_repository.babacafe.repository_url}:latest"
+
   task_execution_role_arn = module.iam.task_execution_role
   task_role_arn           = module.iam.task_execution_role
-  name                    = "babacafe-staging"
-  image                   = "${data.aws_ecr_repository.babacafe.repository_url}:latest"
   log_group_name          = module.cloudwatch.log_group_name
   subnet_ids              = module.private_subnet.subnet_ids
   vpc_id                  = data.aws_vpc.babacafe.id

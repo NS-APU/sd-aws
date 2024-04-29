@@ -6,15 +6,15 @@ resource "aws_ecs_task_definition" "babacafe" {
   family = "${var.name_prefix}-def"
   requires_compatibilities = ["FARGATE"]
   network_mode = "awsvpc"
-  cpu = var.cpu
-  memory = var.memory
+  cpu = var.container_cpu
+  memory = var.container_memory
   execution_role_arn = var.task_execution_role_arn
   task_role_arn = var.task_role_arn 
 
   container_definitions = jsonencode([
     {
-      name = var.name
-      image = var.image
+      name = var.container_name
+      image = var.container_image
       essential = true
       portMappings = [{
         protocol = "tcp"
@@ -48,7 +48,7 @@ resource "aws_ecs_service" "babacafe" {
 
   load_balancer {
     target_group_arn = var.target_group_arn
-    container_name   = var.name
+    container_name   = var.container_name
     container_port   = 3000
   }
 }
