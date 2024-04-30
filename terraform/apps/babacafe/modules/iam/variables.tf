@@ -1,3 +1,3 @@
-variable "app-name" {
+variable "name_prefix" {
   type = string
 }

@@ -54,12 +54,14 @@ module "alb_target_group" {
   port         = 3000
   alb_tg_name  = "babacafe-staging"
   listener_arn = data.aws_lb_listener.selected443.arn
+  listener_rule_priority = 1
 }
 
 module "rds" {
   source            = "../../modules/rds"
   allocated_storage = 10
   tag_name          = "babacafe-staging"
+  name_prefix = "babacafe-staging"
   vpc_id            = data.aws_vpc.babacafe.id
   subnet_ids        = module.private_subnet.subnet_ids
   vpc_cidr_block    = data.aws_vpc.babacafe.cidr_block
@@ -67,7 +69,7 @@ module "rds" {
 
 module "iam" {
   source   = "../../modules/iam"
-  app-name = "babacafe-staging"
+  name_prefix = "babacafe-staging"
 }
 
 data "aws_ecr_repository" "babacafe" {
