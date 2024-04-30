@@ -48,7 +48,7 @@ resource "aws_lb_listener" "babacafe-https" {
   port = 443
   protocol = "HTTPS"
   ssl_policy = "ELBSecurityPolicy-TLS13-1-2-2021-06"
-  certificate_arn = var.certificate_arn
+  certificate_arn = var.certificate_arn_prod
 
   default_action {
     type = "fixed-response"
@@ -58,6 +58,11 @@ resource "aws_lb_listener" "babacafe-https" {
       status_code = "503"
     }
   }
+}
+
+resource "aws_lb_listener_certificate" "staging" {
+  listener_arn    = aws_lb_listener.babacafe-https.arn
+  certificate_arn = var.certificate_arn_stag
 }
 
 resource "aws_lb_listener" "babacafe-http" {

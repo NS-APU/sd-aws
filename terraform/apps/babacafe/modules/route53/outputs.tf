@@ -9,3 +9,7 @@ output "zone_name-stag" {
 output "zone_id-prod" {
   value = aws_route53_zone.babacafe-prod.id
 }
+
+output "zone_id-stag" {
+  value = aws_route53_zone.babacafe-stag.id
+}

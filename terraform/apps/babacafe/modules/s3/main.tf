@@ -2,9 +2,12 @@ resource "aws_s3_bucket" "frontend" {
   bucket = var.s3_bucket_name
 }
 
-resource "aws_s3_bucket_acl" "frontend" {
+resource "aws_s3_bucket_ownership_controls" "frontend" {
   bucket = aws_s3_bucket.frontend.id
-  acl = "public-read"
+
+  rule {
+    object_ownership = "BucketOwnerPreferred"
+  }
 }
 
 resource "aws_s3_bucket_website_configuration" "frontend" {
@@ -28,3 +31,13 @@ resource "aws_s3_bucket_server_side_encryption_configuration" "babacafe" {
     }
   }
 }
+
+resource "aws_s3_bucket_public_access_block" "frontend" {
+  bucket = aws_s3_bucket.frontend.id
+
+  block_public_acls       = false
+  block_public_policy     = false
+  ignore_public_acls      = false
+  restrict_public_buckets = false
+}
+
