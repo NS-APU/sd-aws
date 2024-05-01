@@ -17,6 +17,12 @@ terraform {
 
 provider "aws" {
   region = "ap-northeast-1"
+  default_tags {
+    tags = {
+      project = "BabaCafe"
+      env = "staging"
+    }
+  }
 }
 
 data "aws_vpc" "babacafe" {
