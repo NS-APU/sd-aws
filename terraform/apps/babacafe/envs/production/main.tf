@@ -36,11 +36,28 @@ module "s3" {
 
 module "private_subnet" {
   source               = "../../modules/networks/private_subnet"
+  name_prefix          = "babacafe-production"
   vpc_id               = data.aws_vpc.babacafe.id
   cidr_block_1a        = "10.0.131.0/24"
   cidr_block_1c        = "10.0.132.0/24"
   availability_zone_1a = "ap-northeast-1a"
   availability_zone_1c = "ap-northeast-1c"
+}
+
+// gateway vpc endpoint
+data "aws_vpc_endpoint" "s3" {
+  vpc_id = data.aws_vpc.babacafe.id
+  service_name = "com.amazonaws.ap-northeast-1.s3"
+}
+
+resource "aws_vpc_endpoint_route_table_association" "s3-1a" {
+  vpc_endpoint_id = data.aws_vpc_endpoint.s3.id
+  route_table_id = module.private_subnet.route_table_1a_id
+}
+
+resource "aws_vpc_endpoint_route_table_association" "s3-1c" {
+  vpc_endpoint_id = data.aws_vpc_endpoint.s3.id
+  route_table_id = module.private_subnet.route_table_1c_id
 }
 
 data "aws_lb" "selected" {
