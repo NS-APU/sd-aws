@@ -35,22 +35,6 @@ resource "aws_route53_zone" "babacafe-stag" {
   name = "babacafe-stag.${var.domain_name}"
 }
 
-data "aws_s3_bucket" "staging" {
-  bucket = "babacafe-staging"
-}
-
-resource "aws_route53_record" "babacafe-stag" {
-  type = "A"
-  name = aws_route53_zone.babacafe-stag.name
-  zone_id = aws_route53_zone.babacafe-stag.zone_id
-
-  alias {
-    name = data.aws_s3_bucket.staging.website_domain
-    zone_id = data.aws_s3_bucket.staging.hosted_zone_id
-    evaluate_target_health = true
-  }
-}
-
 resource "aws_route53_record" "babacafe-stag-ns" {
   type = "NS"
   name = aws_route53_zone.babacafe-stag.name
