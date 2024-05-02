@@ -34,7 +34,7 @@ data "aws_vpc" "babacafe" {
   cidr_block = "10.0.0.0/16"
 }
 
-data "aws_acm_certificate" "prod" {
+data "aws_acm_certificate" "stag" {
   provider = aws.virginia
   domain = "babacafe-stag.systemdesign-apu.com"
 }
@@ -44,7 +44,7 @@ module "cloudfront" {
   zone_name = "babacafe-stag.systemdesign-apu.com"
   s3_domain_name = module.s3.bucket_domain_name
   s3_origin_id = module.s3.id
-  acm_certificate_arn = data.aws_acm_certificate.prod.arn
+  acm_certificate_arn = data.aws_acm_certificate.stag.arn
 }
 
 module "s3" {

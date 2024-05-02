@@ -53,13 +53,13 @@ module "s3" {
   cloudfront_arn = module.cloudfront.arn
 }
 
-data "aws_route53_zone" "babacafe-prod" {
+data "aws_route53_zone" "babacafe" {
   name = "babacafe.systemdesign-apu.com"
 }
 
-resource "aws_route53_record" "babacafe-prod" {
-  zone_id = data.aws_route53_zone.babacafe-prod.zone_id
-  name = data.aws_route53_zone.babacafe-prod.name
+resource "aws_route53_record" "babacafe" {
+  zone_id = data.aws_route53_zone.babacafe.zone_id
+  name = data.aws_route53_zone.babacafe.name
   type = "A"
 
   alias {
