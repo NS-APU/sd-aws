@@ -25,14 +25,50 @@ provider "aws" {
   }
 }
 
+provider "aws" {
+  region = "us-east-1"
+  alias = "virginia"
+}
+
 data "aws_vpc" "babacafe" {
   cidr_block = "10.0.0.0/16"
 }
 
+data "aws_acm_certificate" "prod" {
+  provider = aws.virginia
+  domain = "babacafe.systemdesign-apu.com"
+}
+
+module "cloudfront" {
+  source = "../../modules/cloudfront"
+  zone_name = "babacafe.systemdesign-apu.com"
+  s3_domain_name = module.s3.bucket_domain_name
+  s3_origin_id = module.s3.id
+  acm_certificate_arn = data.aws_acm_certificate.prod.arn
+}
+
 module "s3" {
   source         = "../../modules/s3"
-  s3_bucket_name = "babacafe.systemdesign-apu.com"
+  s3_bucket_name = "babacafe-production"
+  cloudfront_arn = module.cloudfront.arn
 }
+
+data "aws_route53_zone" "babacafe-prod" {
+  name = "babacafe.systemdesign-apu.com"
+}
+
+resource "aws_route53_record" "babacafe-prod" {
+  zone_id = data.aws_route53_zone.babacafe-prod.zone_id
+  name = data.aws_route53_zone.babacafe-prod.name
+  type = "A"
+
+  alias {
+    name = module.cloudfront.domain_name
+    zone_id = module.cloudfront.zone_id
+    evaluate_target_health = false
+  }
+}
+
 
 module "private_subnet" {
   source               = "../../modules/networks/private_subnet"
