@@ -1,6 +1,6 @@
 # システムデザイン研究室 AWS環境
 
-![](./figure/overview.svg)
+![image](./figure/overview.png)
 
 ## 概要
 準備中…
