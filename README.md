@@ -2,6 +2,9 @@
 
 ![image](./figure/overview.png)
 
+## AWS環境構築ドキュメント
+https://www.notion.so/AWS-8318f4925dc34b4e951d8abe596b7da4?pvs=4
+
 ## 概要
 準備中…
 
