@@ -17,3 +17,7 @@ variable "availability_zone_1a" {
 variable "availability_zone_1c" {
   type = string
 }
+
+variable "name_prefix" {
+  type = string
+}

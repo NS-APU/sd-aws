@@ -11,7 +11,7 @@ resource "aws_db_instance" "babacafe" {
   skip_final_snapshot = true
   username = "babacafe"
   password = "babacafe"
-  parameter_group_name = "babacafe-db-parameter-group"
+  parameter_group_name = "${var.name_prefix}-db-parameter-group"
   tags = {
     name = var.tag_name
   }

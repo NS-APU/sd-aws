@@ -32,17 +32,6 @@ resource "aws_vpc_endpoint" "s3" {
   vpc_endpoint_type = "Gateway"
 }
 
-data "aws_route_table" "apps" {
-  for_each = toset(var.subnet_ids)
-  subnet_id = each.value
-}
-
-resource "aws_vpc_endpoint_route_table_association" "s3" {
-  for_each = data.aws_route_table.apps
-  vpc_endpoint_id = aws_vpc_endpoint.s3.id
-  route_table_id = data.aws_route_table.apps["${each.key}"].id
-}
-
 #
 # security group
 #
