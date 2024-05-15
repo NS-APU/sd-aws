@@ -25,6 +25,17 @@ provider "aws" {
   }
 }
 
+provider "aws" {
+  region = "us-east-1"
+  alias = "virginia"
+  default_tags {
+    tags = {
+      project = "BabaCafe"
+      env = "common"
+    }
+  }
+}
+
 #
 # Networks
 #
@@ -33,18 +44,21 @@ module "vpc" {
   vpc_cidr_block = local.vpc_cidr_block
 }
 
-data "aws_subnets" "private_subnets" {
-  filter {
-    name = "tag:Name"
-    values = ["app-1a", "app-1c"]
-  }
+module "private_subnet" {
+  source               = "../modules/networks/private_subnet"
+  name_prefix          = "vpc-endpoint"
+  vpc_id               = module.vpc.vpc_id
+  cidr_block_1a        = "10.0.64.0/24"
+  cidr_block_1c        = "10.0.65.0/24"
+  availability_zone_1a = "ap-northeast-1a"
+  availability_zone_1c = "ap-northeast-1c"
 }
 
 module "vpc_endpoint" {
   source = "../modules/networks/vpc_endpoint"
   aws_region = "ap-northeast-1"
   vpc_id = module.vpc.vpc_id
-  subnet_ids = data.aws_subnets.private_subnets.ids
+  subnet_ids = module.private_subnet.subnet_ids
 }
 
 module "igw" {
@@ -67,6 +81,17 @@ module "alb_subnet" {
 #
 module "acm" {
   source = "../modules/acm"
+  zone_name-prod = module.route53.zone_name-prod
+  zone_name-stag = module.route53.zone_name-stag
+  zone_id-prod = module.route53.zone_id-prod
+  zone_id-stag = module.route53.zone_id-stag
+}
+
+module "acm_virginia" {
+  source = "../modules/acm"
+  providers = {
+    aws = aws.virginia
+  }
   zone_name-prod = module.route53.zone_name-prod
   zone_name-stag = module.route53.zone_name-stag
   zone_id-prod = module.route53.zone_id-prod

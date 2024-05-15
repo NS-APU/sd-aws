@@ -57,7 +57,7 @@ resource "aws_ecs_service" "babacafe" {
 # http security group
 #
 resource "aws_security_group" "sg_ecs" {
-  name = "sg_ecs"
+  name = "${var.name_prefix}-sg-ecs"
   description = "security group for ecs instance"
   vpc_id = var.vpc_id
 }

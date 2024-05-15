@@ -11,14 +11,14 @@ resource "aws_db_instance" "babacafe" {
   skip_final_snapshot = true
   username = "babacafe"
   password = "babacafe"
-  parameter_group_name = "babacafe-db-parameter-group"
+  parameter_group_name = "${var.name_prefix}-db-parameter-group"
   tags = {
     name = var.tag_name
   }
 }
 
 resource "aws_db_subnet_group" "babacafe" {
-  name       = "rds-subnet-group"
+  name       = "${var.name_prefix}-rds-subnet-group"
   subnet_ids = var.subnet_ids
 }
 
@@ -26,7 +26,7 @@ resource "aws_db_subnet_group" "babacafe" {
 # postgresql security group
 #
 resource "aws_security_group" "sg_allow_psql" {
-  name = "sg_allow_psql"  
+  name = "${var.name_prefix}-sg-allow-psql"  
   description = "allow postgresql port"
   vpc_id = var.vpc_id
 }
@@ -46,7 +46,7 @@ resource "aws_vpc_security_group_egress_rule" "sg_allow_psql" {
 }
 
 resource "aws_db_parameter_group" "babacafe" {
-  name   = "babacafe-db-parameter-group"
+  name   = "${var.name_prefix}-db-parameter-group"
   family = "postgres15"
 
   parameter {

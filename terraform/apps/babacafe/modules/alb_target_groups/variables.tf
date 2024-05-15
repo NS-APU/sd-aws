@@ -21,3 +21,7 @@ variable "path_pattern" {
 variable "listener_arn" {
   type = string
 }
+
+variable "listener_rule_priority" {
+  type = string
+}
