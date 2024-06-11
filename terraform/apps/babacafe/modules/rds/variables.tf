@@ -1,5 +1,5 @@
 variable "allocated_storage" {
-  type = number
+  type    = number
   default = 10
 }
 
@@ -24,6 +24,6 @@ variable "vpc_cidr_block" {
 }
 
 variable "db_name" {
-  type = string
+  type    = string
   default = "babacafe"
 }

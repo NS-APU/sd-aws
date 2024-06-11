@@ -10,7 +10,7 @@ terraform {
 
   backend "s3" {
     bucket = "sd-apu-terraform-state"
-    key = "babacafe-common.tfstate"
+    key    = "babacafe-common.tfstate"
     region = "ap-northeast-1"
   }
 }
@@ -20,18 +20,18 @@ provider "aws" {
   default_tags {
     tags = {
       project = "BabaCafe"
-      env = "common"
+      env     = "common"
     }
   }
 }
 
 provider "aws" {
   region = "us-east-1"
-  alias = "virginia"
+  alias  = "virginia"
   default_tags {
     tags = {
       project = "BabaCafe"
-      env = "common"
+      env     = "common"
     }
   }
 }
@@ -40,7 +40,7 @@ provider "aws" {
 # Networks
 #
 module "vpc" {
-  source = "../modules/networks/vpc"
+  source         = "../modules/networks/vpc"
   vpc_cidr_block = local.vpc_cidr_block
 }
 
@@ -55,9 +55,9 @@ module "private_subnet" {
 }
 
 module "vpc_endpoint" {
-  source = "../modules/networks/vpc_endpoint"
+  source     = "../modules/networks/vpc_endpoint"
   aws_region = "ap-northeast-1"
-  vpc_id = module.vpc.vpc_id
+  vpc_id     = module.vpc.vpc_id
   subnet_ids = module.private_subnet.subnet_ids
 }
 
@@ -67,11 +67,11 @@ module "igw" {
 }
 
 module "alb_subnet" {
-  source = "../modules/networks/public_subnet"
-  cidr_block_1a = local.alb_subnet_cidr_block_1a
-  cidr_block_1c = local.alb_subnet_cidr_block_1c
-  vpc_id = module.vpc.vpc_id
-  igw_id = module.igw.igw_id
+  source               = "../modules/networks/public_subnet"
+  cidr_block_1a        = local.alb_subnet_cidr_block_1a
+  cidr_block_1c        = local.alb_subnet_cidr_block_1c
+  vpc_id               = module.vpc.vpc_id
+  igw_id               = module.igw.igw_id
   availability_zone_1a = local.availability_zone_1a
   availability_zone_1c = local.availability_zone_1c
 }
@@ -80,11 +80,11 @@ module "alb_subnet" {
 # ACM
 #
 module "acm" {
-  source = "../modules/acm"
+  source         = "../modules/acm"
   zone_name-prod = module.route53.zone_name-prod
   zone_name-stag = module.route53.zone_name-stag
-  zone_id-prod = module.route53.zone_id-prod
-  zone_id-stag = module.route53.zone_id-stag
+  zone_id-prod   = module.route53.zone_id-prod
+  zone_id-stag   = module.route53.zone_id-stag
 }
 
 module "acm_virginia" {
@@ -94,18 +94,18 @@ module "acm_virginia" {
   }
   zone_name-prod = module.route53.zone_name-prod
   zone_name-stag = module.route53.zone_name-stag
-  zone_id-prod = module.route53.zone_id-prod
-  zone_id-stag = module.route53.zone_id-stag
+  zone_id-prod   = module.route53.zone_id-prod
+  zone_id-stag   = module.route53.zone_id-stag
 }
 
 #
 # ALB
 #
 module "alb" {
-  source = "../modules/alb"
-  name_prefix = local.name_prefix
-  alb_subnet_ids = module.alb_subnet.subnet_ids
-  vpc_id = module.vpc.vpc_id
+  source               = "../modules/alb"
+  name_prefix          = local.name_prefix
+  alb_subnet_ids       = module.alb_subnet.subnet_ids
+  vpc_id               = module.vpc.vpc_id
   certificate_arn_prod = module.acm.certificate_arn-prod
   certificate_arn_stag = module.acm.certificate_arn-stag
 }
@@ -114,7 +114,7 @@ module "alb" {
 # ECR
 #
 module "ecr" {
-  source = "../modules/ecr"
+  source      = "../modules/ecr"
   name_prefix = local.name_prefix
 }
 
@@ -122,8 +122,8 @@ module "ecr" {
 # Route53
 #
 module "route53" {
-  source = "../modules/route53"
-  domain_name = local.domain_name
+  source       = "../modules/route53"
+  domain_name  = local.domain_name
   alb_dns_name = module.alb.dns_name
-  alb_zone_id = module.alb.zone_id
+  alb_zone_id  = module.alb.zone_id
 }

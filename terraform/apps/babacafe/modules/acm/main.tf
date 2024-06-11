@@ -1,7 +1,7 @@
 resource "aws_acm_certificate" "babacafe" {
-  domain_name = "${var.zone_name-prod}"
+  domain_name               = var.zone_name-prod
   subject_alternative_names = ["*.${var.zone_name-prod}"]
-  validation_method = "DNS"
+  validation_method         = "DNS"
 
   lifecycle {
     create_before_destroy = true
@@ -25,14 +25,14 @@ resource "aws_route53_record" "dns_verify" {
 }
 
 resource "aws_acm_certificate_validation" "babacafe" {
-  certificate_arn = aws_acm_certificate.babacafe.arn
+  certificate_arn         = aws_acm_certificate.babacafe.arn
   validation_record_fqdns = [for record in aws_route53_record.dns_verify : record.fqdn]
 }
 
 resource "aws_acm_certificate" "babacafe-stag" {
-  domain_name = "${var.zone_name-stag}"
+  domain_name               = var.zone_name-stag
   subject_alternative_names = ["*.${var.zone_name-stag}"]
-  validation_method = "DNS"
+  validation_method         = "DNS"
 
   lifecycle {
     create_before_destroy = true
@@ -56,6 +56,6 @@ resource "aws_route53_record" "dns_verify-stag" {
 }
 
 resource "aws_acm_certificate_validation" "babacafe-stag" {
-  certificate_arn = aws_acm_certificate.babacafe-stag.arn
+  certificate_arn         = aws_acm_certificate.babacafe-stag.arn
   validation_record_fqdns = [for record in aws_route53_record.dns_verify-stag : record.fqdn]
 }
