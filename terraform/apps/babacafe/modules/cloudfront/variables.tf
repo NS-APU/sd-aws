@@ -3,7 +3,7 @@ variable "s3_origin_id" {
 }
 
 variable "s3_domain_name" {
-  
+  type = string
 }
 
 variable "acm_certificate_arn" {

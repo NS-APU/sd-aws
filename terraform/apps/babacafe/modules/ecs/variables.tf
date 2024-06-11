@@ -4,7 +4,7 @@ variable "name_prefix" {
 
 variable "task_execution_role_arn" {
   description = ""
-  type = string
+  type        = string
 }
 
 variable "task_role_arn" {
@@ -13,22 +13,22 @@ variable "task_role_arn" {
 
 variable "container_cpu" {
   description = "The number of cpu units reserved for the container"
-  type = string
+  type        = string
 }
 
 variable "container_memory" {
   description = "The amount (in MiB) of memory to present to the container"
-  type = string
+  type        = string
 }
 
 variable "container_name" {
   description = "The name of a container"
-  type = string
+  type        = string
 }
 
 variable "container_image" {
   description = "The image used to start a container"
-  type = string
+  type        = string
 }
 
 variable "log_group_name" {
@@ -53,5 +53,5 @@ variable "target_group_arn" {
 
 variable "env" {
   description = "environment for this container_definition"
-  type = list(map(string))
+  type        = list(map(string))
 }

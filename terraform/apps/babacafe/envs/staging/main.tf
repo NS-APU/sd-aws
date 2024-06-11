@@ -20,14 +20,14 @@ provider "aws" {
   default_tags {
     tags = {
       project = "BabaCafe"
-      env = "staging"
+      env     = "staging"
     }
   }
 }
 
 provider "aws" {
   region = "us-east-1"
-  alias = "virginia"
+  alias  = "virginia"
 }
 
 data "aws_vpc" "babacafe" {
@@ -36,14 +36,14 @@ data "aws_vpc" "babacafe" {
 
 data "aws_acm_certificate" "stag" {
   provider = aws.virginia
-  domain = "babacafe-stag.systemdesign-apu.com"
+  domain   = "babacafe-stag.systemdesign-apu.com"
 }
 
 module "cloudfront" {
-  source = "../../modules/cloudfront"
-  zone_name = "babacafe-stag.systemdesign-apu.com"
-  s3_domain_name = module.s3.bucket_domain_name
-  s3_origin_id = module.s3.id
+  source              = "../../modules/cloudfront"
+  zone_name           = "babacafe-stag.systemdesign-apu.com"
+  s3_domain_name      = module.s3.bucket_domain_name
+  s3_origin_id        = module.s3.id
   acm_certificate_arn = data.aws_acm_certificate.stag.arn
 }
 
@@ -59,12 +59,12 @@ data "aws_route53_zone" "babacafe" {
 
 resource "aws_route53_record" "babacafe" {
   zone_id = data.aws_route53_zone.babacafe.zone_id
-  name = data.aws_route53_zone.babacafe.name
-  type = "A"
+  name    = data.aws_route53_zone.babacafe.name
+  type    = "A"
 
   alias {
-    name = module.cloudfront.domain_name
-    zone_id = module.cloudfront.zone_id
+    name                   = module.cloudfront.domain_name
+    zone_id                = module.cloudfront.zone_id
     evaluate_target_health = false
   }
 }
@@ -81,18 +81,18 @@ module "private_subnet" {
 
 // gateway vpc endpoint
 data "aws_vpc_endpoint" "s3" {
-  vpc_id = data.aws_vpc.babacafe.id
+  vpc_id       = data.aws_vpc.babacafe.id
   service_name = "com.amazonaws.ap-northeast-1.s3"
 }
 
 resource "aws_vpc_endpoint_route_table_association" "s3-1a" {
   vpc_endpoint_id = data.aws_vpc_endpoint.s3.id
-  route_table_id = module.private_subnet.route_table_1a_id
+  route_table_id  = module.private_subnet.route_table_1a_id
 }
 
 resource "aws_vpc_endpoint_route_table_association" "s3-1c" {
   vpc_endpoint_id = data.aws_vpc_endpoint.s3.id
-  route_table_id = module.private_subnet.route_table_1c_id
+  route_table_id  = module.private_subnet.route_table_1c_id
 }
 
 data "aws_lb" "selected" {
@@ -105,13 +105,13 @@ data "aws_lb_listener" "selected443" {
 }
 
 module "alb_target_group" {
-  source       = "../../modules/alb_target_groups"
-  zone_name    = "api.babacafe-stag.systemdesign-apu.com"
-  path_pattern = "/*"
-  vpc_id       = data.aws_vpc.babacafe.id
-  port         = 3000
-  alb_tg_name  = "babacafe-staging"
-  listener_arn = data.aws_lb_listener.selected443.arn
+  source                 = "../../modules/alb_target_groups"
+  zone_name              = "api.babacafe-stag.systemdesign-apu.com"
+  path_pattern           = "/*"
+  vpc_id                 = data.aws_vpc.babacafe.id
+  port                   = 3000
+  alb_tg_name            = "babacafe-staging"
+  listener_arn           = data.aws_lb_listener.selected443.arn
   listener_rule_priority = 1
 }
 
@@ -119,14 +119,14 @@ module "rds" {
   source            = "../../modules/rds"
   allocated_storage = 10
   tag_name          = "babacafe-staging"
-  name_prefix = "babacafe-staging"
+  name_prefix       = "babacafe-staging"
   vpc_id            = data.aws_vpc.babacafe.id
   subnet_ids        = module.private_subnet.subnet_ids
   vpc_cidr_block    = data.aws_vpc.babacafe.cidr_block
 }
 
 module "iam" {
-  source   = "../../modules/iam"
+  source      = "../../modules/iam"
   name_prefix = "babacafe-staging"
 }
 
@@ -143,10 +143,10 @@ module "ecs" {
   source      = "../../modules/ecs"
   name_prefix = "babacafe-staging"
 
-  container_cpu                     = "256"
-  container_memory                  = "512"
-  container_name                    = "babacafe-staging"
-  container_image                   = "${data.aws_ecr_repository.babacafe.repository_url}:latest"
+  container_cpu    = "256"
+  container_memory = "512"
+  container_name   = "babacafe-staging"
+  container_image  = "${data.aws_ecr_repository.babacafe.repository_url}:latest"
 
   task_execution_role_arn = module.iam.task_execution_role
   task_role_arn           = module.iam.task_execution_role

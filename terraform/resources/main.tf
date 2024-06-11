@@ -10,7 +10,7 @@ terraform {
 
   backend "s3" {
     bucket = "sd-apu-terraform-state"
-    key = "resources.tfstate"
+    key    = "resources.tfstate"
     region = "ap-northeast-1"
   }
 }

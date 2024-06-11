@@ -39,14 +39,14 @@ resource "aws_cloudfront_distribution" "s3_distribution" {
 
   viewer_certificate {
     cloudfront_default_certificate = false
-    acm_certificate_arn = var.acm_certificate_arn
-    ssl_support_method = "sni-only"
-    minimum_protocol_version = "TLSv1.2_2021"
+    acm_certificate_arn            = var.acm_certificate_arn
+    ssl_support_method             = "sni-only"
+    minimum_protocol_version       = "TLSv1.2_2021"
   }
 
   custom_error_response {
-    error_code = 403
-    response_code = 200
+    error_code         = 403
+    response_code      = 200
     response_page_path = "/"
   }
 }
