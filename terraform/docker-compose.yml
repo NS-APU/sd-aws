@@ -11,3 +11,4 @@ services:
     entrypoint: ash
     tty: true
     stdin_open: true
+
