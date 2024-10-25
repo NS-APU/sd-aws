@@ -1,23 +1,23 @@
-resource "aws_db_instance" "pokeapp" {
+resource "aws_db_instance" "zabbix-app" {
   allocated_storage      = var.allocated_storage
   storage_type           = "gp2"
   engine                 = "postgres"
-  engine_version         = "16"
+  engine_version         = "15.5"
   instance_class         = "db.t3.small"
-  db_subnet_group_name   = aws_db_subnet_group.pokeapp.name
+  db_subnet_group_name   = aws_db_subnet_group.zabbix-app.name
   vpc_security_group_ids = [aws_security_group.sg_allow_psql.id]
   multi_az               = false
   db_name                = var.db_name
   skip_final_snapshot    = true
-  username               = "pokeapp"
-  password               = "pokeapp1"
+  username               = "zabbix-app"
+  password               = "zabbix-app"
   parameter_group_name   = "${var.name_prefix}-db-parameter-group"
   tags = {
     name = var.tag_name
   }
 }
 
-resource "aws_db_subnet_group" "pokeapp" {
+resource "aws_db_subnet_group" "zabbix-app" {
   name       = "${var.name_prefix}-rds-subnet-group"
   subnet_ids = var.subnet_ids
 }
@@ -45,9 +45,9 @@ resource "aws_vpc_security_group_egress_rule" "sg_allow_psql" {
   ip_protocol       = -1
 }
 
-resource "aws_db_parameter_group" "pokeapp" {
+resource "aws_db_parameter_group" "zabbix-app" {
   name   = "${var.name_prefix}-db-parameter-group"
-  family = "postgres16"
+  family = "postgres15"
 
   parameter {
     name  = "rds.force_ssl"
