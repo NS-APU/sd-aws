@@ -33,12 +33,6 @@ data "aws_acm_certificate" "prod" {
   domain   = "zabbix-app.systemdesign-apu.com"
 }
 
-module "cloudfront" {
-  source              = "../../modules/cloudfront"
-  zone_name           = "zabbix-app.systemdesign-apu.com"
-  acm_certificate_arn = data.aws_acm_certificate.prod.arn
-}
-
 data "aws_route53_zone" "zabbix-app" {
   name = "zabbix-app.systemdesign-apu.com"
 }
@@ -54,7 +48,6 @@ resource "aws_route53_record" "zabbix-app" {
     evaluate_target_health = false
   }
 }
-
 
 module "private_subnet" {
   source               = "../../modules/networks/private_subnet"
