@@ -1,15 +1,15 @@
-variable "zone_name-prod" {
+variable "zone_name-prod-zabbix" {
   type = string
 }
 
-variable "zone_id-prod" {
+variable "zone_id-prod-zabbix" {
   type = string
 }
 
-//variable "zone_name-stag" {
-//  type = string
-//}
-//
-//variable "zone_id-stag" {
-//  type = string
-//}
+variable "zone_name-prod-grafana" {
+  type = string
+}
+
+variable "zone_id-prod-grafana" {
+  type = string
+}

@@ -10,11 +10,10 @@ variable "vpc_id" {
   type = string
 }
 
-variable "certificate_arn_prod" {
+variable "certificate_arn_prod_zabbix" {
   type = string
 }
 
-//variable "certificate_arn_stag" {
-//  type = string
-//}
-//
+variable "certificate_arn_prod_grafana" {
+  type = string
+}

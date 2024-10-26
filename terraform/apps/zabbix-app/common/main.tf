@@ -7,6 +7,12 @@ terraform {
       version = ">= 5.31.0"
     }
   }
+
+  backend "s3" {
+    bucket = "sd-apu-terraform-state"
+    key    = "zabbix-common.tfstate"
+    region = "ap-northeast-1"
+  }
 }
 
 provider "aws" {
@@ -64,10 +70,10 @@ module "alb_subnet" {
 #
 module "acm" {
   source         = "../modules/acm"
-  zone_name-prod = module.route53.zone_name-prod
-  zone_id-prod   = module.route53.zone_id-prod
-//  zone_name-stag = module.route53.zone_name-stag
-//  zone_id-stag = module.route53.zone_id-stag
+  zone_name-prod-zabbix = module.route53.zone_name_prod_zabbix
+  zone_id-prod-zabbix   = module.route53.zone_id_prod_zabbix
+  zone_name-prod-grafana = module.route53.zone_name_prod_grafana
+  zone_id-prod-grafana = module.route53.zone_id_prod_grafana
 }
 
 #
@@ -78,7 +84,8 @@ module "alb" {
   name_prefix          = local.name_prefix
   alb_subnet_ids       = module.alb_subnet.subnet_ids
   vpc_id               = module.vpc.vpc_id
-  certificate_arn_prod = module.acm.certificate_arn-prod
+  certificate_arn_prod_zabbix = module.acm.certificate_arn_prod_zabbix
+  certificate_arn_prod_grafana = module.acm.certificate_arn_prod_grafana
 }
 
 #

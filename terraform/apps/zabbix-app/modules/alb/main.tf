@@ -48,7 +48,7 @@ resource "aws_lb_listener" "zabbix-app-https" {
   port              = 443
   protocol          = "HTTPS"
   ssl_policy        = "ELBSecurityPolicy-TLS13-1-2-2021-06"
-  certificate_arn   = var.certificate_arn_prod
+  certificate_arn   = var.certificate_arn_prod_zabbix
 
   default_action {
     type = "fixed-response"
@@ -60,10 +60,15 @@ resource "aws_lb_listener" "zabbix-app-https" {
   }
 }
 
-//resource "aws_lb_listener_certificate" "staging" {
-//  listener_arn    = aws_lb_listener.zabbix-app-https.arn
-//  certificate_arn = var.certificate_arn_stag
-//}
+resource "aws_lb_listener_certificate" "prod-zabbix" {
+  listener_arn    = aws_lb_listener.zabbix-app-https.arn
+  certificate_arn = var.certificate_arn_prod_zabbix
+}
+
+resource "aws_lb_listener_certificate" "prod-grafana" {
+  listener_arn    = aws_lb_listener.zabbix-app-https.arn
+  certificate_arn = var.certificate_arn_prod_grafana
+}
 
 resource "aws_lb_listener" "zabbix-app-http" {
   load_balancer_arn = aws_lb.alb.arn
