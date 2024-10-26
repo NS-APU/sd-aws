@@ -9,7 +9,7 @@ resource "aws_db_instance" "zabbix-app" {
   multi_az               = false
   db_name                = var.db_name
   skip_final_snapshot    = true
-  username               = "zabbix-app"
+  username               = "zabbix"
   password               = "zabbix-app"
   parameter_group_name   = "${var.name_prefix}-db-parameter-group"
   tags = {

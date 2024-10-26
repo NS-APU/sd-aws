@@ -30,6 +30,10 @@ variable "listener_arn" {
   type = string
 }
 
-variable "listener_rule_priority" {
+variable "grafana_listener_rule_priority" {
+  type = string
+}
+
+variable "zabbix_listener_rule_priority" {
   type = string
 }

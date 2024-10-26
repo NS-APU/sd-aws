@@ -21,5 +21,5 @@ variable "vpc_id" {
 
 variable "db_name" {
   type    = string
-  default = "zabbix-app"
+  default = "zabbix"
 }

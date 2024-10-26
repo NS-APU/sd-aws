@@ -7,6 +7,12 @@ terraform {
       version = ">= 5.31.0"
     }
   }
+
+  backend "s3" {
+    bucket = "sd-apu-terraform-state"
+    key    = "zabbix-production.tfstate"
+    region = "ap-northeast-1"
+  }
 }
 
 provider "aws" {
@@ -35,30 +41,6 @@ data "aws_lb" "selected" {
   name = "zabbix-app-alb"
 }
 
-resource "aws_route53_record" "zabbix-app" {
-  zone_id = data.aws_route53_zone.zabbix-app.zone_id
-  name    = data.aws_route53_zone.zabbix-app.name
-  type    = "A"
-
-  alias {
-    name                   = data.aws_route53_zone.zabbix-app.name
-    zone_id                = data.aws_lb.selected.zone_id
-    evaluate_target_health = false
-  }
-}
-
-resource "aws_route53_record" "grafana-app" {
-  zone_id = data.aws_route53_zone.grafana-app.zone_id
-  name    = data.aws_route53_zone.grafana-app.name
-  type    = "A"
-
-  alias {
-    name                   = data.aws_route53_zone.grafana-app.name
-    zone_id                = data.aws_lb.selected.zone_id
-    evaluate_target_health = false
-  }
-}
-
 module "private_subnet" {
   source               = "../../modules/networks/private_subnet"
   name_prefix          = "zabbix-app-production"
@@ -78,8 +60,9 @@ module "alb_target_group" {
   source                 = "../../modules/alb_target_groups"
   vpc_id                 = data.aws_vpc.zabbix-app.id
   listener_arn           = data.aws_lb_listener.selected443.arn
-  listener_rule_priority = 2
-  alb_grafana_tg_name    = "zabbix-app-production"
+  grafana_listener_rule_priority = 1
+  zabbix_listener_rule_priority = 2
+  alb_grafana_tg_name    = "grafana-app-production"
   grafana_port           = 3000
   grafana_zone_name      = "grafana.systemdesign-apu.com"
   alb_zabbix_tg_name     = "zabbix-app-production"

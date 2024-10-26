@@ -28,7 +28,7 @@ resource "aws_lb_target_group" "grafana-app" {
 
 resource "aws_lb_listener_rule" "grafana-app" {
   listener_arn = var.listener_arn
-  priority     = var.listener_rule_priority
+  priority     = var.grafana_listener_rule_priority
   action {
     type             = "forward"
     target_group_arn = aws_lb_target_group.grafana-app.arn
@@ -71,7 +71,7 @@ resource "aws_lb_target_group" "zabbix-app" {
 
 resource "aws_lb_listener_rule" "zabbix-app" {
   listener_arn = var.listener_arn
-  priority     = var.listener_rule_priority
+  priority     = var.zabbix_listener_rule_priority
   action {
     type             = "forward"
     target_group_arn = aws_lb_target_group.zabbix-app.arn
