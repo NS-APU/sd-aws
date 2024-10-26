@@ -19,17 +19,6 @@ provider "aws" {
   }
 }
 
-provider "aws" {
-  region = "us-east-1"
-  alias  = "virginia"
-  default_tags {
-    tags = {
-      project = "Zabbix-App"
-      env     = "common"
-    }
-  }
-}
-
 #
 # Networks
 #
@@ -77,15 +66,8 @@ module "acm" {
   source         = "../modules/acm"
   zone_name-prod = module.route53.zone_name-prod
   zone_id-prod   = module.route53.zone_id-prod
-}
-
-module "acm_virginia" {
-  source = "../modules/acm"
-  providers = {
-    aws = aws.virginia
-  }
-  zone_name-prod = module.route53.zone_name-prod
-  zone_id-prod   = module.route53.zone_id-prod
+//  zone_name-stag = module.route53.zone_name-stag
+//  zone_id-stag = module.route53.zone_id-stag
 }
 
 #

@@ -14,6 +14,7 @@ variable "certificate_arn_prod" {
   type = string
 }
 
-variable "certificate_arn_stag" {
-  type = string
-}
+//variable "certificate_arn_stag" {
+//  type = string
+//}
+//

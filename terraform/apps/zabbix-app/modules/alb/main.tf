@@ -60,10 +60,10 @@ resource "aws_lb_listener" "zabbix-app-https" {
   }
 }
 
-resource "aws_lb_listener_certificate" "staging" {
-  listener_arn    = aws_lb_listener.zabbix-app-https.arn
-  certificate_arn = var.certificate_arn_stag
-}
+//resource "aws_lb_listener_certificate" "staging" {
+//  listener_arn    = aws_lb_listener.zabbix-app-https.arn
+//  certificate_arn = var.certificate_arn_stag
+//}
 
 resource "aws_lb_listener" "zabbix-app-http" {
   load_balancer_arn = aws_lb.alb.arn

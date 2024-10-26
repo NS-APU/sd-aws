@@ -19,22 +19,20 @@ provider "aws" {
   }
 }
 
-provider "aws" {
-  region = "us-east-1"
-  alias  = "virginia"
-}
-
 data "aws_vpc" "zabbix-app" {
   cidr_block = "10.3.0.0/16"
 }
 
-data "aws_acm_certificate" "prod" {
-  provider = aws.virginia
-  domain   = "zabbix-app.systemdesign-apu.com"
+data "aws_route53_zone" "zabbix-app" {
+  name = "zabbix.systemdesign-apu.com"
 }
 
-data "aws_route53_zone" "zabbix-app" {
-  name = "zabbix-app.systemdesign-apu.com"
+data "aws_route53_zone" "grafana-app" {
+  name = "grafana.systemdesign-apu.com"
+}
+
+data "aws_lb" "selected" {
+  name = "zabbix-app-alb"
 }
 
 resource "aws_route53_record" "zabbix-app" {
@@ -43,8 +41,20 @@ resource "aws_route53_record" "zabbix-app" {
   type    = "A"
 
   alias {
-    name                   = module.cloudfront.domain_name
-    zone_id                = module.cloudfront.zone_id
+    name                   = data.aws_route53_zone.zabbix-app.name
+    zone_id                = data.aws_lb.selected.zone_id
+    evaluate_target_health = false
+  }
+}
+
+resource "aws_route53_record" "grafana-app" {
+  zone_id = data.aws_route53_zone.grafana-app.zone_id
+  name    = data.aws_route53_zone.grafana-app.name
+  type    = "A"
+
+  alias {
+    name                   = data.aws_route53_zone.grafana-app.name
+    zone_id                = data.aws_lb.selected.zone_id
     evaluate_target_health = false
   }
 }
@@ -59,7 +69,6 @@ module "private_subnet" {
   availability_zone_1c = "ap-northeast-1c"
 }
 
-// gateway vpc endpoint
 data "aws_lb_listener" "selected443" {
   load_balancer_arn = data.aws_lb.selected.arn
   port              = 443
@@ -85,7 +94,6 @@ module "rds" {
   name_prefix       = "zabbix-app-production"
   vpc_id            = data.aws_vpc.zabbix-app.id
   subnet_ids        = module.private_subnet.subnet_ids
-  vpc_cidr_block    = data.aws_vpc.zabbix-app.cidr_block
 }
 
 module "iam" {
