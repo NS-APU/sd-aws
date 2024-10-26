@@ -1,8 +1,16 @@
-variable "alb_tg_name" {
+variable "alb_grafana_tg_name" {
   type = string
 }
 
-variable "port" {
+variable "alb_zabbix_tg_name" {
+  type = string
+}
+
+variable "grafana_port" {
+  type = number
+}
+
+variable "zabbix_port" {
   type = number
 }
 
@@ -10,11 +18,11 @@ variable "vpc_id" {
   type = string
 }
 
-variable "zone_name" {
+variable "grafana_zone_name" {
   type = string
 }
 
-variable "path_pattern" {
+variable "zabbix_zone_name" {
   type = string
 }
 

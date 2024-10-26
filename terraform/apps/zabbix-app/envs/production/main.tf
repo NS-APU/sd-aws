@@ -67,13 +67,15 @@ data "aws_lb_listener" "selected443" {
 
 module "alb_target_group" {
   source                 = "../../modules/alb_target_groups"
-  zone_name              = "api.zabbix-app.systemdesign-apu.com"
-  path_pattern           = "/*"
   vpc_id                 = data.aws_vpc.zabbix-app.id
-  port                   = 3000
-  alb_tg_name            = "zabbix-app-production"
   listener_arn           = data.aws_lb_listener.selected443.arn
   listener_rule_priority = 2
+  alb_grafana_tg_name    = "zabbix-app-production"
+  grafana_port           = 3000
+  grafana_zone_name      = "grafana.systemdesign-apu.com"
+  alb_zabbix_tg_name     = "zabbix-app-production"
+  zabbix_port            = 8080
+  zabbix_zone_name       = "zabbix.systemdesign-apu.com"
 }
 
 module "rds" {
