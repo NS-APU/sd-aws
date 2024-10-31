@@ -109,3 +109,48 @@ module "cloudwatch" {
   log_group_name = "zabbix-app-production"
 }
 
+module "ecs" {
+  source = "../../modules/ecs"
+  name_prefix = "zabbix-app-production"
+
+  container_cpu = "256"
+  container_memory = "512"
+  container_name_1 = "zabbix-server"
+  container_name_2 = "zabbix-frontend"
+  container_name_3 = "grafana"
+  container_image_1 = "${data.aws_ecr_repository.zabbix-app.repository_url}@sha256:63fbd9a17dc483abb20e915112226aa4129dd43f80c0d191e2ad5894e7df07b9"
+  container_image_2 = "${data.aws_ecr_repository.zabbix-app.repository_url}@sha256:568a9c5fb9947fe1ccc7ef05a051ce9e9c19bcdd3b9973a4f4158df82f8e5ea4" 
+  container_image_3 = "${data.aws_ecr_repository.zabbix-app.repository_url}@sha256:530817a4592f3dc74a0987c8890497269959bdbc547eb2d4b710640fdcba5c14" 
+  task_execution_role_arn = module.iam.task_execution_role 
+  task_role_arn = module.iam.task_execution_role 
+  log_group_name = module.cloudwatch.log_group_name
+  subnet_ids = module.private_subnet.subnet_ids
+  vpc_id = data.aws_vpc.zabbix-app.id
+  vpc_cidr_block = data.aws_vpc.zabbix-app.cidr_block
+  target_group_arn_grafana = module.alb_target_group.grafana_arn
+  target_group_arn_zabbix = module.alb_target_group.arn
+
+
+  env_zabbix_server = [
+    { name = "POSTGRES_USER", value = "zabbix" },
+    { name = "POSTGRES_PASSWORD", value = "zabbix-app" },
+    { name = "POSTGRES_DB", value = "zabbix" },
+    { name = "DB_SERVER_HOST", value = "terraform-20241026094819845700000001.c7kkk4amyjm2.ap-northeast-1.rds.amazonaws.com" },
+    { name = "DB_SERVER_PORT", value = "5432" }
+  ]
+   env_zabbix_frontend = [
+    { name = "POSTGRES_USER", value = "zabbix" },
+    { name = "DB_SERVER_HOST", value =  "terraform-20241026094819845700000001.c7kkk4amyjm2.ap-northeast-1.rds.amazonaws.com" },
+    { name = "ZBX_SERVER_HOST", value = "localhost:10051" },
+    { name = "POSTGRES_PASSWORD", value = "zabbix-app" },
+    { name = "POSTGRES_DB", value = "zabbix" },
+    { name = "ZBX_SERVER_PORT", value = "10051" },
+    { name = "PHP_TZ", value = "Asia/Tokyo" }
+  ]
+
+    env_grafana = [
+    { name = "GF_SECURIT_ADMIN_USER", value = "admin" },
+    { name = "GF_SECURITY_ADMIN_PASSWORD", value = "12345" },
+    { name = "TZ", value = "Asia/Tokyo" }
+  ]
+}
