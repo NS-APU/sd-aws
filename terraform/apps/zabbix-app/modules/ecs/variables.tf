@@ -21,12 +21,32 @@ variable "container_memory" {
   type        = string
 }
 
-variable "container_name" {
-  description = "The name of a container"
+variable "container_name_1" {
+  description = "The name of a container no.1"
   type        = string
 }
 
-variable "container_image" {
+variable "container_name_2" {
+  description = "The name of a container no.2"
+  type        = string
+}
+
+variable "container_name_3" {
+  description = "The name of a container no.3"
+  type        = string
+}
+
+variable "container_image_1" {
+  description = "The image used to start a container"
+  type        = string
+}
+
+variable "container_image_2" {
+  description = "The image used to start a container"
+  type        = string
+}
+
+variable "container_image_3" {
   description = "The image used to start a container"
   type        = string
 }
@@ -47,11 +67,25 @@ variable "vpc_cidr_block" {
   type = string
 }
 
-variable "target_group_arn" {
+variable "target_group_arn_grafana" {
   type = string
 }
 
-variable "env" {
-  description = "environment for this container_definition"
+variable "target_group_arn_zabbix" {
+  type = string
+}
+
+variable "env_zabbix_server" {
+  description = "Environment variables for Zabbix Server"
+  type        = list(map(string))
+}
+
+variable "env_zabbix_frontend" {
+  description = "Environment variables for Zabbix Frontend"
+  type        = list(map(string))
+}
+
+variable "env_grafana" {
+  description = "Environment variables for Grafana"
   type        = list(map(string))
 }

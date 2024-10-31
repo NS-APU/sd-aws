@@ -2,7 +2,7 @@ resource "aws_db_instance" "zabbix-app" {
   allocated_storage      = var.allocated_storage
   storage_type           = "gp2"
   engine                 = "postgres"
-  engine_version         = "15.5"
+  engine_version         = "15.7"
   instance_class         = "db.t3.small"
   db_subnet_group_name   = aws_db_subnet_group.zabbix-app.name
   vpc_security_group_ids = [aws_security_group.sg_allow_psql.id]
