@@ -100,8 +100,16 @@ module "iam" {
   name_prefix = "zabbix-app-production"
 }
 
-data "aws_ecr_repository" "zabbix-app" {
-  name = "zabbix-app-ecr-repo"
+data "aws_ecr_repository" "zabbix-server" {
+  name = "zabbix-server-ecr-repo"
+}
+
+data "aws_ecr_repository" "zabbix-frontend" {
+  name = "zabbix-server-ecr-repo"
+}
+
+data "aws_ecr_repository" "grafana" {
+  name = "zabbix-server-ecr-repo"
 }
 
 module "cloudwatch" {
@@ -118,9 +126,9 @@ module "ecs" {
   container_name_1 = "zabbix-server"
   container_name_2 = "zabbix-frontend"
   container_name_3 = "grafana"
-  container_image_1 = "${data.aws_ecr_repository.zabbix-app.repository_url}@sha256:63fbd9a17dc483abb20e915112226aa4129dd43f80c0d191e2ad5894e7df07b9"
-  container_image_2 = "${data.aws_ecr_repository.zabbix-app.repository_url}@sha256:568a9c5fb9947fe1ccc7ef05a051ce9e9c19bcdd3b9973a4f4158df82f8e5ea4" 
-  container_image_3 = "${data.aws_ecr_repository.zabbix-app.repository_url}@sha256:530817a4592f3dc74a0987c8890497269959bdbc547eb2d4b710640fdcba5c14" 
+  container_image_1 = "${data.aws_ecr_repository.zabbix-server.repository_url}:latest"
+  container_image_2 = "${data.aws_ecr_repository.zabbix-frontend.repository_url}:latest" 
+  container_image_3 = "${data.aws_ecr_repository.grafana.repository_url}:latest" 
   task_execution_role_arn = module.iam.task_execution_role 
   task_role_arn = module.iam.task_execution_role 
   log_group_name = module.cloudwatch.log_group_name
