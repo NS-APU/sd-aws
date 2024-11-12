@@ -143,12 +143,12 @@ module "ecs" {
     { name = "POSTGRES_USER", value = "zabbix" },
     { name = "POSTGRES_PASSWORD", value = "zabbix-app" },
     { name = "POSTGRES_DB", value = "zabbix" },
-    { name = "DB_SERVER_HOST", value = "terraform-20241026094819845700000001.c7kkk4amyjm2.ap-northeast-1.rds.amazonaws.com" },
+    { name = "DB_SERVER_HOST", value = module.rds.address },
     { name = "DB_SERVER_PORT", value = "5432" }
   ]
    env_zabbix_frontend = [
     { name = "POSTGRES_USER", value = "zabbix" },
-    { name = "DB_SERVER_HOST", value =  "terraform-20241026094819845700000001.c7kkk4amyjm2.ap-northeast-1.rds.amazonaws.com" },
+    { name = "DB_SERVER_HOST", value =  module.rds.address },
     { name = "ZBX_SERVER_HOST", value = "localhost:10051" },
     { name = "POSTGRES_PASSWORD", value = "zabbix-app" },
     { name = "POSTGRES_DB", value = "zabbix" },
