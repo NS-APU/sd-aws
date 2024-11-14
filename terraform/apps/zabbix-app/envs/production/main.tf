@@ -72,6 +72,23 @@ data "aws_lb_listener" "selected443" {
   port              = 443
 }
 
+// NAT Gateway
+data "aws_nat_gateway" "nat-gw" {
+  vpc_id = data.aws_vpc.zabbix-app.id
+}
+
+resource "aws_route" "nat-gw-1a" {
+  route_table_id = module.private_subnet.route_table_1a_id
+  destination_cidr_block = "0.0.0.0/0"
+  nat_gateway_id = data.aws_nat_gateway.nat-gw.id
+}
+
+resource "aws_route" "nat-gw-1c" {
+  route_table_id = module.private_subnet.route_table_1c_id
+  destination_cidr_block = "0.0.0.0/0"
+  nat_gateway_id = data.aws_nat_gateway.nat-gw.id
+}
+
 module "alb_target_group" {
   source                 = "../../modules/alb_target_groups"
   vpc_id                 = data.aws_vpc.zabbix-app.id
