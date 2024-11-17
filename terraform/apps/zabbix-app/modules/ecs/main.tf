@@ -89,6 +89,7 @@ resource "aws_ecs_service" "zabbix-app" {
   task_definition = aws_ecs_task_definition.zabbix-app.arn
   launch_type     = "FARGATE"
   desired_count   = 1
+  force_new_deployment = true
 
   network_configuration {
     security_groups = [aws_security_group.sg_ecs.id]
