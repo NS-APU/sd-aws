@@ -43,6 +43,7 @@ module "private_subnet" {
   availability_zone_1c = "ap-northeast-1c"
 }
 
+
 module "vpc_endpoint" {
   source     = "../modules/networks/vpc_endpoint"
   aws_region = "ap-northeast-1"
@@ -63,6 +64,11 @@ module "alb_subnet" {
   igw_id               = module.igw.igw_id
   availability_zone_1a = local.availability_zone_1a
   availability_zone_1c = local.availability_zone_1c
+}
+
+module "nat_gateway" {
+  source = "../modules/networks/nat_gateway"
+  subnet_id = module.alb_subnet.subnet_id_1a
 }
 
 #
