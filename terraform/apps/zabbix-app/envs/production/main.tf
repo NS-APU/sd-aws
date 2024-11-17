@@ -105,11 +105,11 @@ data "aws_ecr_repository" "zabbix-server" {
 }
 
 data "aws_ecr_repository" "zabbix-frontend" {
-  name = "zabbix-server-ecr-repo"
+  name = "zabbix-frontend-ecr-repo"
 }
 
 data "aws_ecr_repository" "grafana" {
-  name = "zabbix-server-ecr-repo"
+  name = "grafana-ecr-repo"
 }
 
 module "cloudwatch" {
