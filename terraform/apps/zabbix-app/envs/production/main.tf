@@ -161,7 +161,8 @@ module "ecs" {
     { name = "POSTGRES_PASSWORD", value = "zabbix-app" },
     { name = "POSTGRES_DB", value = "zabbix" },
     { name = "DB_SERVER_HOST", value = module.rds.address },
-    { name = "DB_SERVER_PORT", value = "5432" }
+    { name = "DB_SERVER_PORT", value = "5432" },
+    { name = "ACCESS_TOKEN", value = "NtI5dbzeVr5g/HCS4cu8m/T0uliPUDI7HTnH2wd95hlFO8UGQ0uGfmlNTQiUUh9Xkq/rRFff+q6/R7Lwqcev8SRtpvAWhDvY73sTADtLxqyTi2ZtezyPwbvDfU7ccev/Xyfi8EaJoXa0OPGsPE5MhwdB04t89/1O/w1cDnyilFU=" }
   ]
    env_zabbix_frontend = [
     { name = "POSTGRES_USER", value = "zabbix" },
